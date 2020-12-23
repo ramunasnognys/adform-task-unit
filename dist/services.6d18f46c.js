@@ -1934,7 +1934,7 @@ exports.PRIME_URL = PRIME_URL;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.get = void 0;
+exports.get = exports.getStreets = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -1942,25 +1942,58 @@ var _env = require("../enviroments/env.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// GET 
+//GET
+const getStreets = async () => {
+  try {
+    const response = await _axios.default.get(`${_env.PRIME_URL}`); // Promise resolve
+
+    return response.data.features;
+  } catch (e) {
+    //   console.log(e);
+    console.log("!!!! ERRROR !!!!");
+  }
+}; // GET
 // return a promise
+
+
+exports.getStreets = getStreets;
+
 const get = () => {
   return _axios.default.get(`${_env.PRIME_URL}`);
-  console.log("users");
 };
 
 exports.get = get;
-console.log("hohoho");
 },{"axios":"node_modules/axios/index.js","../enviroments/env.js":"src/enviroments/env.js"}],"src/services/index.js":[function(require,module,exports) {
 "use strict";
 
 var _util = require("./util.js");
 
 console.log("START"); //GET Data
+// get().then((data) => {
+//   const featuresArray = data.data.features;
+//   displayFeaturesObj(featuresArray.slice(0, 6));
+//   console.log(featuresArray);
+// });
+// const displayFeaturesObj = (data) => {
+//   if (Array.isArray(data) && data.length > 0) {
+//     data.forEach((element, index) => {
+//       console.log(element.properties);
+//     });
+//   }
+// };
 
-(0, _util.get)().then(data => {
-  console.log(data); // displayTitle(data.data.slice(0, 3));
+(0, _util.getStreets)().then(data => {
+  displayStreets(data.slice(0, 6)); //   console.log(data.slice(0, 6));
 });
+
+const displayStreets = data => {
+  // console.log(data);
+  for (let result of data) {
+    const street = result.properties; // console.log(street);
+
+    console.log(street);
+  }
+};
 },{"./util.js":"src/services/util.js"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -1989,7 +2022,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53114" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55059" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
