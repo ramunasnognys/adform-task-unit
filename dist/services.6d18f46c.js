@@ -1934,7 +1934,7 @@ exports.PRIME_URL = PRIME_URL;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.get = exports.getStreets = void 0;
+exports.getUniqueListBy = exports.getResponse = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -1942,59 +1942,72 @@ var _env = require("../enviroments/env.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//GET
-const getStreets = async () => {
+// GET STREETS
+const getResponse = async () => {
   try {
-    const response = await _axios.default.get(`${_env.PRIME_URL}`); // Promise resolve
+    const response = await _axios.default.get(_env.PRIME_URL); // Promise resolve
 
     return response.data.features;
   } catch (e) {
-    //   console.log(e);
-    console.log("!!!! ERRROR !!!!");
+    console.log("!!!! ERRROR !!!!", e);
   }
-}; // GET
-// return a promise
+}; // GET UNIQUE STREET NAMES
 
 
-exports.getStreets = getStreets;
+exports.getResponse = getResponse;
 
-const get = () => {
-  return _axios.default.get(`${_env.PRIME_URL}`);
+const getUniqueListBy = (arr, key) => {
+  return [...new Map(arr.map(item => [item[key], item])).values()];
 };
 
-exports.get = get;
-},{"axios":"node_modules/axios/index.js","../enviroments/env.js":"src/enviroments/env.js"}],"src/services/index.js":[function(require,module,exports) {
+exports.getUniqueListBy = getUniqueListBy;
+},{"axios":"node_modules/axios/index.js","../enviroments/env.js":"src/enviroments/env.js"}],"src/services/streets.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.showStreets = void 0;
+
+var _util = require("./util.js");
+
+var _env = require("../enviroments/env.js");
+
+let streets;
+
+const showStreets = async () => {
+  try {
+    (0, _util.getResponse)().then(res => {
+      streets = res.map(item => item.properties);
+      const duplicateStreetsArray = streets.map(item => item.STREET); // refactor
+
+      const uniqStreetsArray = [...new Set(duplicateStreetsArray)];
+      console.log(` THE LENGTH OF UNIQ values: ${uniqStreetsArray.length}`);
+      console.log(` THE LENGTH OF DUPLICATE values: ${duplicateStreetsArray.length}`);
+      uniqStreetsArray.forEach(result => {
+        console.log(result);
+      }); // refactor end
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.showStreets = showStreets;
+},{"./util.js":"src/services/util.js","../enviroments/env.js":"src/enviroments/env.js"}],"src/services/requestChecker.js":[function(require,module,exports) {
+
+},{}],"src/services/index.js":[function(require,module,exports) {
 "use strict";
 
 var _util = require("./util.js");
 
-console.log("START"); //GET Data
-// get().then((data) => {
-//   const featuresArray = data.data.features;
-//   displayFeaturesObj(featuresArray.slice(0, 6));
-//   console.log(featuresArray);
-// });
-// const displayFeaturesObj = (data) => {
-//   if (Array.isArray(data) && data.length > 0) {
-//     data.forEach((element, index) => {
-//       console.log(element.properties);
-//     });
-//   }
-// };
+var _streets = require("./streets.js");
 
-(0, _util.getStreets)().then(data => {
-  displayStreets(data.slice(0, 6)); //   console.log(data.slice(0, 6));
-});
+var _requestChecker = require("./requestChecker.js");
 
-const displayStreets = data => {
-  // console.log(data);
-  for (let result of data) {
-    const street = result.properties; // console.log(street);
-
-    console.log(street);
-  }
-};
-},{"./util.js":"src/services/util.js"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+// showStreets();
+(0, _requestChecker.sendMessage)();
+},{"./util.js":"src/services/util.js","./streets.js":"src/services/streets.js","./requestChecker.js":"src/services/requestChecker.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -2022,7 +2035,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55059" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49794" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -2198,5 +2211,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","src/services/index.js"], null)
+},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","src/services/index.js"], null)
 //# sourceMappingURL=/services.6d18f46c.js.map
