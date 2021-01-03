@@ -1,14 +1,13 @@
-import axios from "axios";
+// Capitalize words "foo = Foo"
+export const capitalize = (String.prototype.capitalize = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+});
 
-import { BASE_URL, PRIME_URL } from "../enviroments/env.js";
+export function hideSpinner() {
+  // document.getElementById("spinner").style.display = "none";
+  document.getElementById("spinner").style.visibility = "hidden";
+}
 
-// GET 
-// return a promise
-export const get = () => {
-    return axios.get(`${PRIME_URL}`);
-      console.log("users");
-   }
-   
-
-
-console.log("hohoho");
+export function showSpinner() {
+  document.getElementById("spinner").style.visibility = "visible";
+}

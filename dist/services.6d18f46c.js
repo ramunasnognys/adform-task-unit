@@ -117,7 +117,43 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
+})({"src/services/util.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.hideSpinner = hideSpinner;
+exports.showSpinner = showSpinner;
+exports.capitalize = void 0;
+
+// Capitalize words "foo = Foo"
+const capitalize = String.prototype.capitalize = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
+exports.capitalize = capitalize;
+
+function hideSpinner() {
+  // document.getElementById("spinner").style.display = "none";
+  document.getElementById("spinner").style.visibility = "hidden";
+}
+
+function showSpinner() {
+  document.getElementById("spinner").style.visibility = "visible";
+}
+},{}],"src/enviroments/env.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PRIME_URL = exports.BASE_URL = void 0;
+const BASE_URL = "https://jsonplaceholder.typicode.com";
+exports.BASE_URL = BASE_URL;
+const PRIME_URL = "https://raw.githubusercontent.com/zemirco/sf-city-lots-json/master/citylots.json";
+exports.PRIME_URL = PRIME_URL;
+},{}],"node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
 'use strict';
 
 module.exports = function bind(fn, thisArg) {
@@ -1158,7 +1194,7 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-},{"./../utils":"node_modules/axios/lib/utils.js","./../core/settle":"node_modules/axios/lib/core/settle.js","./../helpers/cookies":"node_modules/axios/lib/helpers/cookies.js","./../helpers/buildURL":"node_modules/axios/lib/helpers/buildURL.js","../core/buildFullPath":"node_modules/axios/lib/core/buildFullPath.js","./../helpers/parseHeaders":"node_modules/axios/lib/helpers/parseHeaders.js","./../helpers/isURLSameOrigin":"node_modules/axios/lib/helpers/isURLSameOrigin.js","../core/createError":"node_modules/axios/lib/core/createError.js"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/process/browser.js":[function(require,module,exports) {
+},{"./../utils":"node_modules/axios/lib/utils.js","./../core/settle":"node_modules/axios/lib/core/settle.js","./../helpers/cookies":"node_modules/axios/lib/helpers/cookies.js","./../helpers/buildURL":"node_modules/axios/lib/helpers/buildURL.js","../core/buildFullPath":"node_modules/axios/lib/core/buildFullPath.js","./../helpers/parseHeaders":"node_modules/axios/lib/helpers/parseHeaders.js","./../helpers/isURLSameOrigin":"node_modules/axios/lib/helpers/isURLSameOrigin.js","../core/createError":"node_modules/axios/lib/core/createError.js"}],"node_modules/process/browser.js":[function(require,module,exports) {
 
 // shim for using process in browser
 var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
@@ -1468,7 +1504,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-},{"./utils":"node_modules/axios/lib/utils.js","./helpers/normalizeHeaderName":"node_modules/axios/lib/helpers/normalizeHeaderName.js","./adapters/xhr":"node_modules/axios/lib/adapters/xhr.js","./adapters/http":"node_modules/axios/lib/adapters/xhr.js","process":"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/process/browser.js"}],"node_modules/axios/lib/core/dispatchRequest.js":[function(require,module,exports) {
+},{"./utils":"node_modules/axios/lib/utils.js","./helpers/normalizeHeaderName":"node_modules/axios/lib/helpers/normalizeHeaderName.js","./adapters/xhr":"node_modules/axios/lib/adapters/xhr.js","./adapters/http":"node_modules/axios/lib/adapters/xhr.js","process":"node_modules/process/browser.js"}],"node_modules/axios/lib/core/dispatchRequest.js":[function(require,module,exports) {
 'use strict';
 
 var utils = require('./../utils');
@@ -1917,51 +1953,113 @@ module.exports.default = axios;
 
 },{"./utils":"node_modules/axios/lib/utils.js","./helpers/bind":"node_modules/axios/lib/helpers/bind.js","./core/Axios":"node_modules/axios/lib/core/Axios.js","./core/mergeConfig":"node_modules/axios/lib/core/mergeConfig.js","./defaults":"node_modules/axios/lib/defaults.js","./cancel/Cancel":"node_modules/axios/lib/cancel/Cancel.js","./cancel/CancelToken":"node_modules/axios/lib/cancel/CancelToken.js","./cancel/isCancel":"node_modules/axios/lib/cancel/isCancel.js","./helpers/spread":"node_modules/axios/lib/helpers/spread.js","./helpers/isAxiosError":"node_modules/axios/lib/helpers/isAxiosError.js"}],"node_modules/axios/index.js":[function(require,module,exports) {
 module.exports = require('./lib/axios');
-},{"./lib/axios":"node_modules/axios/lib/axios.js"}],"src/enviroments/env.js":[function(require,module,exports) {
+},{"./lib/axios":"node_modules/axios/lib/axios.js"}],"src/services/getAPIResponse.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PRIME_URL = exports.BASE_URL = void 0;
-const BASE_URL = "https://jsonplaceholder.typicode.com";
-exports.BASE_URL = BASE_URL;
-const PRIME_URL = "https://raw.githubusercontent.com/zemirco/sf-city-lots-json/master/citylots.json";
-exports.PRIME_URL = PRIME_URL;
-},{}],"src/services/util.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.get = void 0;
-
-var _axios = _interopRequireDefault(require("axios"));
+exports.getResponse = void 0;
 
 var _env = require("../enviroments/env.js");
 
+var _util = require("./util.js");
+
+var _axios = _interopRequireDefault(require("axios"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// GET 
-// return a promise
-const get = () => {
-  return _axios.default.get(`${_env.PRIME_URL}`);
-  console.log("users");
+const getResponse = async () => {
+  try {
+    const response = await _axios.default.get(_env.PRIME_URL); // Promise resolve
+
+    if (response) {
+      (0, _util.hideSpinner)();
+    }
+
+    return response.data.features;
+  } catch (e) {
+    console.log("!!!! ERRROR !!!!", e);
+  }
 };
 
-exports.get = get;
-console.log("hohoho");
-},{"axios":"node_modules/axios/index.js","../enviroments/env.js":"src/enviroments/env.js"}],"src/services/index.js":[function(require,module,exports) {
+exports.getResponse = getResponse;
+},{"../enviroments/env.js":"src/enviroments/env.js","./util.js":"src/services/util.js","axios":"node_modules/axios/index.js"}],"src/services/getStreets.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getStreets = void 0;
+
+var _getAPIResponse = require("./getAPIResponse.js");
+
+const streetsContainer = document.getElementById("api-container");
+let streets;
+
+const getStreets = async () => {
+  try {
+    (0, _getAPIResponse.getResponse)().then(res => {
+      streets = res.map(item => item.properties);
+      const duplicateStreetsArray = streets.map(item => item.STREET);
+      const uniqStreetsArray = [...new Set(duplicateStreetsArray)];
+      uniqStreetsArray.forEach((str, i) => {
+        if (str !== null && str !== "") {
+          const itemsDiv = document.createElement("div");
+          streetsContainer.appendChild(itemsDiv);
+          const itemId = document.createElement("span");
+          itemsDiv.appendChild(itemId);
+          itemId.innerText = i + 1;
+          itemId.style.paddingRight = "5px";
+          const itemStreet = document.createElement("span");
+          itemsDiv.appendChild(itemStreet);
+          itemStreet.innerText = str.toLowerCase().capitalize();
+        }
+      });
+      console.log(` THE LENGTH OF UNIQ values: ${uniqStreetsArray.length}`);
+      console.log(` THE LENGTH OF DUPLICATE values: ${duplicateStreetsArray.length}`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.getStreets = getStreets;
+},{"./getAPIResponse.js":"src/services/getAPIResponse.js"}],"src/services/requestChecker.js":[function(require,module,exports) {
+// const { makeControlled } = require("concurrency-control");
+// // a concurrency parameter of 1 makes the function secuential
+// const MAX_CONCURRENT = 3;
+// const controlledGetFromApi = makeControlled(getResponse, {
+//   concurrency: MAX_CONCURRENT,
+// });
+// let i = 40;
+// while (i--)
+//   // functions will be executed in batches, never more than 3 at a time
+//   controlledGetFromApi(i)
+//     .then((result) => {
+//       console.log("Vuallla, Success!!!");
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//       if (!error.status) {
+//         console.log(error);
+//       }
+//     });
+},{}],"src/services/index.js":[function(require,module,exports) {
 "use strict";
 
 var _util = require("./util.js");
 
-console.log("START"); //GET Data
+var _getStreets = require("./getStreets.js");
 
-(0, _util.get)().then(data => {
-  console.log(data); // displayTitle(data.data.slice(0, 3));
+var _requestChecker = require("./requestChecker.js");
+
+const button = document.querySelector("#button");
+button.addEventListener("click", () => {
+  (0, _util.showSpinner)();
+  (0, _getStreets.getStreets)();
 });
-},{"./util.js":"src/services/util.js"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./util.js":"src/services/util.js","./getStreets.js":"src/services/getStreets.js","./requestChecker.js":"src/services/requestChecker.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -1989,7 +2087,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53114" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56827" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -2165,5 +2263,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","src/services/index.js"], null)
+},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","src/services/index.js"], null)
 //# sourceMappingURL=/services.6d18f46c.js.map

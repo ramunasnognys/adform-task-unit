@@ -1,9 +1,10 @@
-import { get } from "./util.js";
+import { showSpinner } from "./util.js";
+import { getStreets } from "./getStreets.js";
+import { request, sendMessage } from "./requestChecker.js";
 
-console.log("START");
+const button = document.querySelector("#button");
 
-//GET Data
-get().then((data) => {
-    console.log(data)
-    // displayTitle(data.data.slice(0, 3));
-  });
+button.addEventListener("click", () => {
+  showSpinner();
+  getStreets();
+});
