@@ -1,11 +1,12 @@
 {
-  "name": "node-starter",
+  "name": "adform-task",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "concurrency-control": "^1.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
@@ -18,8 +19,6 @@
     "last 1 Chrome version"
   ],
   "scripts": {
-    "start": "nodemon --exec babel-node src/services/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel index.html",
     "build": "parcel build index.html"
   },

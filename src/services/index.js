@@ -1,6 +1,10 @@
-import { get, getResponse } from "./util.js";
-import { getStreet, showStreets } from "./streets.js";
-import {request, sendMessage} from "./requestChecker.js";
+import { showSpinner } from "./util.js";
+import { getStreets } from "./getStreets.js";
+import { request, sendMessage } from "./requestChecker.js";
 
-// showStreets();
-sendMessage()
+const button = document.querySelector("#button");
+
+button.addEventListener("click", () => {
+  showSpinner();
+  getStreets();
+});
